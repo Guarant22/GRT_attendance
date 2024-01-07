@@ -6,6 +6,7 @@ import logging
 from django.http import JsonResponse
 from .models import MeetingTime, AccessToken, RefreshToken
 from urllib.parse import urlencode
+from django.db.models import Q
 
 # Cisco Webex
 class WebexServices:
@@ -127,6 +128,7 @@ class AttendanceServices:
         self.current_time=self.get_time()
         self.current_hour=self.current_time.strftime("%H:%M")
         self.current_date=self.current_time.strftime("%m/%d")
+        self.formatted_date=self.current_time.strftime("%y/%m/%d")
 
     def get_time(self):
         # UTC 현재 시간
@@ -143,7 +145,7 @@ class AttendanceServices:
 
     def get_registrants(self):
         register_meetings=MeetingTime.objects.filter(
-            date=self.current_date,
+            Q(date=self.current_date)|Q(date=self.formatted_date),
             start_time__lte=self.current_hour,
             end_time__gte=self.current_hour
             )
