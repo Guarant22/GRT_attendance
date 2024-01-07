@@ -14,16 +14,16 @@ class WebexServices:
         self.client_secret  ='916e3006c07b256a9274c5608cdb66a4887bae07394e254b81c7a201f75ab7c2'
         self.redirect_base_uri   ='https://limhyeongseok.pythonanywhere.com/'
         self.permission_url      ='https://webexapis.com/v1/authorize?'
-        self.access_token   =self.get_access_token()
-        self.api_base_url   ="https://webexapis.com/v1"
+        self.access_token   = self.get_access_token()
+        self.api_base_url   = "https://webexapis.com/v1"
         self.headers        ={
             "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json",
         }
         
     def get_access_token(self):
-        access_token=AccessToken.objects.latest('access_token')
-        return access_token
+        latest_token=AccessToken.objects.latest('access_token')
+        return latest_token.access_token
 
     def get_permission_url(self):
         params={
@@ -83,6 +83,7 @@ class WebexServices:
     def get_meeting_id(self, meetingnum):
         print("meetingNUM: "+meetingnum)
         params={"meetingNumber":meetingnum}
+        print(self.access_token)
         resp=requests.get(f"{self.api_base_url}/meetings",
                           headers=self.headers,params=params)
         data=resp.json()
