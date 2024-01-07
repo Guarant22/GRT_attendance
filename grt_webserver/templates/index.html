@@ -49,10 +49,16 @@
   </head>
   <body>
     <header>
-      <h1>학생 관리 시스템 메인 페이지</h1>
+      <img
+        class="logo"
+        src="/static/images/guarantee_logo.jpg"
+        alt="guarantee"
+        style="width: 100px"
+      />
+      <h1 style="margin-top: 30px">학생 관리 시스템 메인 페이지</h1>
 
       {% if user.is_authenticated %}
-      <nav>
+      <nav id="log_out">
         <a
           href="#"
           onclick="sendRequest('grt/auth/logout');"
@@ -61,32 +67,67 @@
         >
       </nav>
     </header>
-    <button class="student_info" type="button">
-      <a href="#" onclick="sendRequest('grt/addstudent');">학생 정보 입력</a>
-    </button>
-    <button class="student_list" type="button">
-      <a href="#" onclick="sendRequest('grt/students');">학생 목록 확인</a>
-    </button>
-    <!-- <button class="student_attend" type="button">
+
+    <h2 id="clock" style="color: white; background: #205e44">clock</h2>
+
+    <script>
+      var Target = document.getElementById("clock");
+      function clock() {
+        var time = new Date();
+
+        var month = time.getMonth();
+        var date = time.getDate();
+        var day = time.getDay();
+        var week = ["일", "월", "화", "수", "목", "금", "토"];
+
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+
+        Target.innerText =
+          `${month + 1}월 ${date}일 ${week[day]}요일 ` +
+          `${hours < 10 ? `0${hours}` : hours}:${
+            minutes < 10 ? `0${minutes}` : minutes
+          }:${seconds < 10 ? `0${seconds}` : seconds}`;
+      }
+      clock();
+      setInterval(clock, 1000); // 1초마다 실행
+    </script>
+
+    <div class="box">
+      <button class="student_info" type="button">
+        <a href="#" onclick="sendRequest('grt/addstudent');">학생 정보 입력</a>
+      </button>
+      <button class="student_list" type="button">
+        <a href="#" onclick="sendRequest('grt/students');">학생 목록 확인</a>
+      </button>
+      <!-- <button class="student_attend" type="button">
       <a href="#" onclick="sendRequest('grt/checkattendance');"
         >학생 출결 확인</a
       >
     </button> -->
-    {% comment %}
-    <li>
-      <a href="#" onclick="sendRequest('grt/createmeeting');">미팅룸 생성</a>
-    </li>
-    {% endcomment %}
-    <button class="student_check" type="button">
-      <a href="#" onclick="sendRequest('grt/checkattendance');">참가자 조회</a>
-    </button>
-    <button class="now_time" type="button">
-      <a href="https://webexapis.com/v1/authorize?client_id=C0c76a9d575a654a541fd7750ba43c03c9a6884ad1dea9827ebae97d61c6fbc00&response_type=code&redirect_uri=https%3A%2F%2Flimhyeongseok.pythonanywhere.com%2Fgrt%2Foauth&scope=meeting%3Aadmin_participants_read%20meeting%3Acontrols_read%20meeting%3Aparticipants_read%20meeting%3Aparticipants_write%20meeting%3Aschedules_read%20meeting%3Aschedules_write%20spark%3Akms&state=abcd1234">현재 시간</a>
-    </button>
+      {% comment %}
+      <li>
+        <a href="#" onclick="sendRequest('grt/createmeeting');">미팅룸 생성</a>
+      </li>
+      {% endcomment %}
+      <button class="student_check" type="button">
+        <a href="#" onclick="sendRequest('grt/checkattendance');"
+          >참가자 조회</a
+        >
+      </button>
+    </div>
+    <!-- <button class="now_time" type="button">
+      <a href="#" onclick="sendRequest('grt/gettest');">현재 시간</a>
+    </button> -->
     {% else %}
-    <button class="login" type="button">
-      <a href="#" onclick="sendRequest('grt/login');">로그인</a>
-    </button>
+    <nav id="log_in">
+      <!-- <button class="login" type="button"> -->
+      <a href="#" onclick="sendRequest('grt/login'); " id="login-font"
+        >로그인</a
+      >
+      <!-- </button> -->
+    </nav>
     {% endif %}
 
     <script src="../static/js/main.js"></script>

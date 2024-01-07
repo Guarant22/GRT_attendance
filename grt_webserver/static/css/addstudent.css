@@ -3,6 +3,15 @@ h1 {
   height: 100px;
   background: #205e44;
   color: white;
+  margin-bottom: 0px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #205e44;
+  /* padding: 20px; */
 }
 
 .submit {
@@ -21,7 +30,7 @@ h1 {
   margin-bottom: 100px;
 }
 
-.main_page {
+/* .main_page {
   position: relative;
   border: none;
   display: inline-block;
@@ -34,7 +43,31 @@ h1 {
   transition: 0.25s;
   background-color: #205e44;
   color: #1e6b7b;
+} */
+
+#main_page {
+  display: inline-block;
+  /* vertical-align: middle; */
+  display: block;
+  text-align: center;
+  margin: 0.25rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  background: teal;
+  height: 5%;
+  width: 8%;
+  margin-right: 20px;
 }
+
 .font_color {
   color: white;
+  font-size: x-small;
+}
+
+#clock {
+  background-color: #205e44;
+  margin-top: 0px;
+  margin-bottom: 20px;
 }

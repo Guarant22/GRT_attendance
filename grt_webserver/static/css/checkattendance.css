@@ -3,21 +3,31 @@ h1 {
   height: 100px;
   background: #205e44;
   color: white;
+  margin-bottom: 0px;
 }
 
-.main_page {
-  position: relative;
-  border: none;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #205e44;
+  /* padding: 20px; */
+}
+
+#main_page {
   display: inline-block;
-  padding: 10px 20px;
-  border-radius: 15px;
-  font-family: "paybooc-Light", sans-serif;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  /* vertical-align: middle; */
+  display: block;
+  text-align: center;
+  margin: 0.25rem;
+  padding: 0.5rem 1rem;
   text-decoration: none;
-  font-weight: 600;
-  transition: 0.25s;
-  background-color: #205e44;
-  color: #1e6b7b;
+  font-weight: bold;
+  color: white;
+  background: teal;
+  height: 5%;
+  width: 8%;
+  margin-right: 20px;
 }
 
 #meeting_submit {
@@ -32,5 +42,17 @@ h1 {
   font-weight: 600;
   transition: 0.25s;
   background-color: #205e44;
-  color: #1e6b7b;
+  color: #f8f9fa;
+  margin-bottom: 100px;
+}
+
+#font_color {
+  color: white;
+  font-size: x-small;
+}
+
+#clock {
+  background-color: #205e44;
+  margin-top: 0px;
+  margin-bottom: 20px;
 }

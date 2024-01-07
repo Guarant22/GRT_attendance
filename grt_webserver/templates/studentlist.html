@@ -36,15 +36,42 @@
     <link rel="stylesheet" href="/static/css/studentlist.css" />
   </head>
   <body>
-    <h1>학생 목록</h1>
+    <header>
+      <h1>학생 목록</h1>
+      <nav id="main_page">
+        <a href="{% url 'mainpage' %}" class="font_color">메인페이지</a>
+      </nav>
+    </header>
+    <h2 id="clock" style="color: white; background: #205e44">clock</h2>
 
+    <script>
+      var Target = document.getElementById("clock");
+      function clock() {
+        var time = new Date();
+
+        var month = time.getMonth();
+        var date = time.getDate();
+        var day = time.getDay();
+        var week = ["일", "월", "화", "수", "목", "금", "토"];
+
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+
+        Target.innerText =
+          `${month + 1}월 ${date}일 ${week[day]}요일 ` +
+          `${hours < 10 ? `0${hours}` : hours}:${
+            minutes < 10 ? `0${minutes}` : minutes
+          }:${seconds < 10 ? `0${seconds}` : seconds}`;
+      }
+      clock();
+      setInterval(clock, 1000); // 1초마다 실행
+    </script>
     <form method="get" action="{% url 'studentlist' %}">
       {{ form.as_p }}
       <button type="submit" class="submit">검색</button>
     </form>
-    <button class="main_page" type="button">
-      <a href="{% url 'mainpage' %}" class="font_color">메인페이지</a>
-    </button>
+
     <ul>
       {% for student in students %}
       <li>
@@ -59,5 +86,8 @@
       <!-- 추가적인 학생 정보를 여기에 표시할 수 있습니다. -->
       {% endfor %}
     </ul>
+    <!-- <button class="main_page" type="button">
+      <a href="{% url 'mainpage' %}" class="font_color">메인페이지</a>
+    </button> -->
   </body>
 </html>

@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>학생 정보 입력</title>
-        <link rel="stylesheet" href="/static/css/addstudent.css" />
-    </head>
-    <body>
-        <a>
-        <h1>Add Student</h1>
-        <form method="post" action="{% url 'addstudent' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="submit" type="submit">Submit</button>
-        </form>
-        <button class="main_page" type="button">
+  <head>
+    <meta charset="UTF-8" />
+    <title>학생 정보 입력</title>
+    <link rel="stylesheet" href="/static/css/addstudent.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Add Student</h1>
+
+      <nav id="main_page">
+        <a href="{% url 'mainpage' %}" class="font_color">메인페이지</a>
+      </nav>
+    </header>
+    <h2 id="clock" style="color: white; background: #205e44">clock</h2>
+
+    <script>
+      var Target = document.getElementById("clock");
+      function clock() {
+        var time = new Date();
+
+        var month = time.getMonth();
+        var date = time.getDate();
+        var day = time.getDay();
+        var week = ["일", "월", "화", "수", "목", "금", "토"];
+
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+
+        Target.innerText =
+          `${month + 1}월 ${date}일 ${week[day]}요일 ` +
+          `${hours < 10 ? `0${hours}` : hours}:${
+            minutes < 10 ? `0${minutes}` : minutes
+          }:${seconds < 10 ? `0${seconds}` : seconds}`;
+      }
+      clock();
+      setInterval(clock, 1000); // 1초마다 실행
+    </script>
+    <form method="post" action="{% url 'addstudent' %}">
+      {% csrf_token %} {{ form.as_p }}
+      <button class="submit" type="submit">Submit</button>
+    </form>
+    <!-- <button class="main_page" type="button">
             <a href="{% url 'mainpage' %}" class="font_color">메인페이지</a>
-        </button>
-    </body>
+        </button> -->
+  </body>
 </html>
