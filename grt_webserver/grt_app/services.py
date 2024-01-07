@@ -10,20 +10,20 @@ from urllib.parse import urlencode
 # Cisco Webex
 class WebexServices:
     def __init__(self):
-        self.client_id      ='C0c76a9d575a654a541fd7750ba43c03c9a6884ad1dea9827ebae97d61c6fbc00'
-        self.client_secret  ='3fda2b03d420fb02d14c155a5f8d1044f34381fb9c0a8ce77ad7fd254b7fa329'
+        self.client_id      ='Cc7c1ac1b01c0da9693c0e66332dcfc53c130aee641ac0551c32dc83e8a1873f1'
+        self.client_secret  ='916e3006c07b256a9274c5608cdb66a4887bae07394e254b81c7a201f75ab7c2'
         self.redirect_base_uri   ='https://limhyeongseok.pythonanywhere.com/'
         self.permission_url      ='https://webexapis.com/v1/authorize?'
-        self.access_token   =self.get_access_token()
-        self.api_base_url   ="https://webexapis.com/v1"
+        self.access_token   = self.get_access_token()
+        self.api_base_url   = "https://webexapis.com/v1"
         self.headers        ={
             "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json",
         }
         
     def get_access_token(self):
-        access_token=AccessToken.objects.latest('access_token')
-        return access_token
+        latest_token=AccessToken.objects.latest('access_token')
+        return latest_token.access_token
 
     def get_permission_url(self):
         params={
@@ -65,7 +65,7 @@ class WebexServices:
             access_token=access_token,
             expire_time=expire_time
         )
-        print(access_token)
+        # print(access_token)
         token_obj.save()
 
         token_obj=RefreshToken(
@@ -83,6 +83,7 @@ class WebexServices:
     def get_meeting_id(self, meetingnum):
         print("meetingNUM: "+meetingnum)
         params={"meetingNumber":meetingnum}
+        print(self.access_token)
         resp=requests.get(f"{self.api_base_url}/meetings",
                           headers=self.headers,params=params)
         data=resp.json()
