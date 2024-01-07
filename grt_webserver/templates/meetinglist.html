@@ -13,7 +13,7 @@
     {% if meetings %}
         <ul>
         {% for meeting in meetings %}
-            <li>{{ meeting.date }} - {{ meeting.start_time }}</li>
+            <li>{{ meeting.date }} - {{ meeting.start_time }} - {{ meeting.end_time }}</li>
             <!-- 추가적인 학생 정보를 여기에 표시할 수 있습니다. -->
         {% endfor %}
         </ul>
