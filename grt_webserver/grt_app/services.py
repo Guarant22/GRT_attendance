@@ -23,7 +23,7 @@ class WebexServices:
         }
         
     def get_access_token(self):
-        latest_token=AccessToken.objects.latest('access_token')
+        latest_token=AccessToken.objects.latest('expire_time')
         return latest_token.access_token
 
     def get_permission_url(self):
@@ -87,6 +87,9 @@ class WebexServices:
         print(self.access_token)
         resp=requests.get(f"{self.api_base_url}/meetings",
                           headers=self.headers,params=params)
+        if resp.status_code!=200:
+            print(resp.status_code)
+            return JsonResponse({"error":"Got error"},status=resp.status_code)
         data=resp.json()
         print(resp)
         meetingIds=[item['id'] for item in data['items']]
