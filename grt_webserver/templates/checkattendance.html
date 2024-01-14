@@ -76,8 +76,9 @@
       
     </main>
     <div id="participant-list">
-      {% for absent in absents %} {{ absent.name }} - {{ absent.email }} - {{
-      absent.phone_num }} {% endfor%}
+      {% for absent in absents %}
+       <li> {{ absent.name }} - {{ absent.email }} - {{ absent.phone_num }} </li>
+      {% endfor%}
    
 
     {% comment %}
