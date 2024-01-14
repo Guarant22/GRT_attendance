@@ -159,7 +159,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 
 # ENV_FILE = os.path.join(BASE_DIR,'grtconfig.env')
 
