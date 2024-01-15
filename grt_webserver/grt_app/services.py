@@ -6,6 +6,7 @@ import logging
 from django.http import JsonResponse
 from .models import MeetingTime, AccessToken, RefreshToken
 from urllib.parse import urlencode
+from django.db.models import Q
 
 # Cisco Webex
 class WebexServices:
@@ -22,7 +23,7 @@ class WebexServices:
         }
         
     def get_access_token(self):
-        latest_token=AccessToken.objects.latest('access_token')
+        latest_token=AccessToken.objects.latest('expire_time')
         return latest_token.access_token
 
     def get_permission_url(self):
@@ -86,6 +87,9 @@ class WebexServices:
         print(self.access_token)
         resp=requests.get(f"{self.api_base_url}/meetings",
                           headers=self.headers,params=params)
+        if resp.status_code!=200:
+            print(resp.status_code)
+            return JsonResponse({"error":"Got error"},status=resp.status_code)
         data=resp.json()
         print(resp)
         meetingIds=[item['id'] for item in data['items']]
@@ -127,6 +131,7 @@ class AttendanceServices:
         self.current_time=self.get_time()
         self.current_hour=self.current_time.strftime("%H:%M")
         self.current_date=self.current_time.strftime("%m/%d")
+        self.formatted_date=self.current_time.strftime("%y/%m/%d")
 
     def get_time(self):
         # UTC 현재 시간
@@ -143,7 +148,7 @@ class AttendanceServices:
 
     def get_registrants(self):
         register_meetings=MeetingTime.objects.filter(
-            date=self.current_date,
+            Q(date=self.current_date)|Q(date=self.formatted_date),
             start_time__lte=self.current_hour,
             end_time__gte=self.current_hour
             )
