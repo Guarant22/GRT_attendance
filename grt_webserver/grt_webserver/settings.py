@@ -104,7 +104,7 @@ DATABASES = {
         'NAME':'Prototype',
         'CLIENT':{
             # 나중에 환경변수로 꼭 바꾸기
-            'host':'mongodb+srv://limhs8630:LAUok3N69ag7tVr0@grt.7rbucps.mongodb.net/'
+            'host':'mongodb+srv://limhs8630:C4uKsbjDX27z5cy3@grt.7rbucps.mongodb.net/'
         }
         
     }
