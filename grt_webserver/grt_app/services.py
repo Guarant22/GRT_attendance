@@ -11,8 +11,8 @@ from django.db.models import Q
 # Cisco Webex
 class WebexServices:
     def __init__(self):
-        self.client_id      ='Cc7c1ac1b01c0da9693c0e66332dcfc53c130aee641ac0551c32dc83e8a1873f1'
-        self.client_secret  ='916e3006c07b256a9274c5608cdb66a4887bae07394e254b81c7a201f75ab7c2'
+        self.client_id      ='C03c4cc4241b670127061c64ffaa4d51983adb429256e00f581e155a4bba3b6cf'
+        self.client_secret  ='75a811db4175b51eda367464a91679c1a40c1b7e9f9684186952ce8d4834db0b'
         self.redirect_base_uri   ='https://limhyeongseok.pythonanywhere.com/'
         self.permission_url      ='https://webexapis.com/v1/authorize?'
         self.access_token   = self.get_access_token()
