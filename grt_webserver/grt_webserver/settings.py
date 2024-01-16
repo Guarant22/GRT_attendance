@@ -37,7 +37,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['limhyeongseok.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
@@ -104,7 +104,7 @@ DATABASES = {
         'NAME':'Prototype',
         'CLIENT':{
             # 나중에 환경변수로 꼭 바꾸기
-            'host':'mongodb+srv://limhs8630:LAUok3N69ag7tVr0@grt.7rbucps.mongodb.net/'
+            'host':'mongodb+srv://limhs8630:C4uKsbjDX27z5cy3@grt.7rbucps.mongodb.net/'
         }
         
     }
@@ -159,7 +159,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 
 # ENV_FILE = os.path.join(BASE_DIR,'grtconfig.env')
 

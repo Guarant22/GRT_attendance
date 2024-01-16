@@ -1,4 +1,5 @@
-from django.db import models
+# from django.db import models
+from djongo import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 # Create your models here.
 
@@ -49,6 +50,7 @@ class Student(models.Model):
     
 
 class MeetingTime(models.Model):
+    _id             = models.ObjectIdField()
     email           = models.CharField(max_length=100)
     date            = models.CharField(max_length=100)
     start_time      = models.CharField(max_length=100)

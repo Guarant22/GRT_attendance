@@ -6,12 +6,13 @@ import logging
 from django.http import JsonResponse
 from .models import MeetingTime, AccessToken, RefreshToken
 from urllib.parse import urlencode
+from django.db.models import Q
 
 # Cisco Webex
 class WebexServices:
     def __init__(self):
-        self.client_id      ='Cc7c1ac1b01c0da9693c0e66332dcfc53c130aee641ac0551c32dc83e8a1873f1'
-        self.client_secret  ='916e3006c07b256a9274c5608cdb66a4887bae07394e254b81c7a201f75ab7c2'
+        self.client_id      ='C03c4cc4241b670127061c64ffaa4d51983adb429256e00f581e155a4bba3b6cf'
+        self.client_secret  ='75a811db4175b51eda367464a91679c1a40c1b7e9f9684186952ce8d4834db0b'
         self.redirect_base_uri   ='https://limhyeongseok.pythonanywhere.com/'
         self.permission_url      ='https://webexapis.com/v1/authorize?'
         self.access_token   = self.get_access_token()
@@ -22,7 +23,7 @@ class WebexServices:
         }
         
     def get_access_token(self):
-        latest_token=AccessToken.objects.latest('access_token')
+        latest_token=AccessToken.objects.latest('expire_time')
         return latest_token.access_token
 
     def get_permission_url(self):
@@ -86,6 +87,9 @@ class WebexServices:
         print(self.access_token)
         resp=requests.get(f"{self.api_base_url}/meetings",
                           headers=self.headers,params=params)
+        if resp.status_code!=200:
+            print(resp.status_code)
+            return JsonResponse({"error":"Got error"},status=resp.status_code)
         data=resp.json()
         print(resp)
         meetingIds=[item['id'] for item in data['items']]
@@ -127,6 +131,7 @@ class AttendanceServices:
         self.current_time=self.get_time()
         self.current_hour=self.current_time.strftime("%H:%M")
         self.current_date=self.current_time.strftime("%m/%d")
+        self.formatted_date=self.current_time.strftime("%y/%m/%d")
 
     def get_time(self):
         # UTC 현재 시간
@@ -143,7 +148,7 @@ class AttendanceServices:
 
     def get_registrants(self):
         register_meetings=MeetingTime.objects.filter(
-            date=self.current_date,
+            Q(date=self.current_date)|Q(date=self.formatted_date),
             start_time__lte=self.current_hour,
             end_time__gte=self.current_hour
             )

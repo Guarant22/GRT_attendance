@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -6,6 +6,7 @@ from rest_framework.views import APIView, View
 from rest_framework import generics
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import logout as auth_logout
+from bson import ObjectId
 import json
 import requests
 import os
@@ -62,7 +63,8 @@ class StudentListView(View):
         else:
             students = Student.objects.all()
             for student in students:
-                print(student)
+                print(ObjectId(student.id))
+                print(type(student.id))
         return render(request, 'studentlist.html', {'form': form, 'students': students})
 
 class MeetingListView(View):
@@ -72,11 +74,22 @@ class MeetingListView(View):
         student = Student.objects.get(email=student_email)
         try:
             meetings = MeetingTime.objects.filter(email=student_email)
+            print(meetings)
+            meetings_with_str_id=[{
+                'id_str':str(meeting._id),
+                'email':meeting.email,
+                'date':meeting.date,
+                'start_time':meeting.start_time,
+                'end_time':meeting.end_time,
+                'pk':meeting.pk
+            } for meeting in meetings]
+            print(meetings_with_str_id)
         except:
             meetings = None
+            meetings_with_str_id = None
         data={
             'student':student,
-            'meetings':meetings
+            'meetings':meetings_with_str_id
         }
         return render(request,'meetinglist.html',data)
 
@@ -118,6 +131,32 @@ class AddMeetingView(View):
         else:
             print(form.errors)
             return render(request, 'studentlist.html', {'success':"No"})
+        
+
+        
+class DeleteMeetingView(View):
+    def post(self, request):
+        try:
+            data=json.loads(request.body)
+            print(data)
+            id=data.get('meeting_id_str')
+            date=data.get('date')
+            email = data.get('email')
+            start_time = data.get('start_time')
+            end_time = data.get('end_time')
+            pk=data.get('pk')
+            obj_id=ObjectId(id)
+            try:
+                meeting=MeetingTime.objects.get(date=date, email=email,start_time=start_time,end_time=end_time)
+                print(meeting)
+                meeting.delete()
+                # meeting_time=MeetingTime.objects.get(id=ObjectId(meeting_id))
+                # return meeting_time
+            except Exception as e:
+                print(e)
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
         
 # class CreateMeetingView(View):
 #     def get(self,request,*args, **kwargs):
