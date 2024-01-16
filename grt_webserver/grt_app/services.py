@@ -25,6 +25,10 @@ class WebexServices:
     def get_access_token(self):
         latest_token=AccessToken.objects.latest('expire_time')
         return latest_token.access_token
+    
+    def get_refresh_token(self):
+        latest_refresh_token=RefreshToken.objects.latest('refresh_expire_time')
+        return latest_refresh_token
 
     def get_permission_url(self):
         params={
@@ -75,6 +79,40 @@ class WebexServices:
         )
         token_obj.save()
 
+        return access_token
+    
+    def refresh_access_token(self):
+        latest_refresh_token=self.get_refresh_token()
+        params={
+            'grant_type':'refresh_token',
+            'client_id':self.client_id,
+            'client_secret':self.client_secret,
+            'refresh_token':latest_refresh_token
+        }
+        resp=requests.post(f"{self.api_base_url}/access_token",data=params)
+        data=resp.json()
+        
+        access_token = data.get("access_token")
+        expires_in = data.get("expires_in")
+        refresh_token = data.get("refresh_token")
+        refresh_expires_in = data.get("refresh_token_expires_in")
+        current_time = datetime.datetime.now()
+        expire_time = current_time + datetime.timedelta(seconds=expires_in)
+        refresh_expire_time = current_time + datetime.timedelta(seconds=refresh_expires_in)
+
+        token_obj=AccessToken(
+            access_token=access_token,
+            expire_time=expire_time
+        )
+        # print(access_token)
+        token_obj.save()
+
+        token_obj=RefreshToken(
+            refresh_token=refresh_token,
+            refresh_expire_time=refresh_expire_time
+        )
+        token_obj.save()
+        
         return access_token
 
     def create_meeting(self):
