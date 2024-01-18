@@ -63,9 +63,9 @@ class StudentListView(View):
             #     print(student.id)
         else:
             students = Student.objects.all()
-            for student in students:
-                print(ObjectId(student.id))
-                print(type(student.id))
+            # for student in students:
+            #     print(ObjectId(student.id))
+            #     print(type(student.id))
         return render(request, 'studentlist.html', {'form': form, 'students': students})
 
 class MeetingListView(View):
