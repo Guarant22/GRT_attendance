@@ -4,3 +4,4 @@ pymongo[srv]==3.12.1
 pytz
 djangorestframework==3.14.0
 requests==2.31.0
+celery
