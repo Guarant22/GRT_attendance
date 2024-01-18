@@ -10,8 +10,9 @@ from bson import ObjectId
 import json
 import requests
 import os
+import datetime
 
-from .models import Student, MeetingTime
+from .models import Student, MeetingTime, AccessToken
 from .forms import StudentForm, StudentSearchForm, MeetingTimeForm, MeetingRoomForm
 from .serializers import LoginUserSerializer, UserSeriazlizer
 from .services import WebexServices, AttendanceServices
@@ -215,10 +216,11 @@ class OauthView(View):
         
 class TestView(View):
     def get(self, request, *args, **kwargs):
-        time=AttendanceServices()
-        time_now=time.get_registrants()
-        print(time_now)
-        return JsonResponse({"time": time_now})
+        latest_accesst_token=AccessToken.objects.latest('expire_time')
+        today=datetime.date.today()
+        print(latest_accesst_token.expire_time.date())
+        print(today)
+        return
 
 class MainPageView(View):
     def get(self, request, *args, **kwargs):

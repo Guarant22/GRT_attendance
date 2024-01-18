@@ -11,8 +11,8 @@ from django.db.models import Q
 # Cisco Webex
 class WebexServices:
     def __init__(self):
-        self.client_id      ='Cc7c1ac1b01c0da9693c0e66332dcfc53c130aee641ac0551c32dc83e8a1873f1'
-        self.client_secret  ='916e3006c07b256a9274c5608cdb66a4887bae07394e254b81c7a201f75ab7c2'
+        self.client_id      ='C03c4cc4241b670127061c64ffaa4d51983adb429256e00f581e155a4bba3b6cf'
+        self.client_secret  ='75a811db4175b51eda367464a91679c1a40c1b7e9f9684186952ce8d4834db0b'
         self.redirect_base_uri   ='https://limhyeongseok.pythonanywhere.com/'
         self.permission_url      ='https://webexapis.com/v1/authorize?'
         self.access_token   = self.get_access_token()
@@ -25,6 +25,10 @@ class WebexServices:
     def get_access_token(self):
         latest_token=AccessToken.objects.latest('expire_time')
         return latest_token.access_token
+    
+    def get_refresh_token(self):
+        latest_refresh_token=RefreshToken.objects.latest('refresh_expire_time')
+        return latest_refresh_token
 
     def get_permission_url(self):
         params={
@@ -76,6 +80,43 @@ class WebexServices:
         token_obj.save()
 
         return access_token
+    
+    def refresh_access_token(self):
+        latest_access_token=self.get_access_token()
+        today=datetime.date.today()
+        if latest_access_token.expire_time.date()==today:
+            latest_refresh_token=self.get_refresh_token()
+            params={
+                'grant_type':'refresh_token',
+                'client_id':self.client_id,
+                'client_secret':self.client_secret,
+                'refresh_token':latest_refresh_token
+            }
+            resp=requests.post(f"{self.api_base_url}/access_token",data=params)
+            data=resp.json()
+        
+            access_token = data.get("access_token")
+            expires_in = data.get("expires_in")
+            refresh_token = data.get("refresh_token")
+            refresh_expires_in = data.get("refresh_token_expires_in")
+            current_time = datetime.datetime.now()
+            expire_time = current_time + datetime.timedelta(seconds=expires_in)
+            refresh_expire_time = current_time + datetime.timedelta(seconds=refresh_expires_in)
+
+            token_obj=AccessToken(
+                access_token=access_token,
+                expire_time=expire_time
+            )
+            # print(access_token)
+            token_obj.save()
+
+            token_obj=RefreshToken(
+                refresh_token=refresh_token,
+                refresh_expire_time=refresh_expire_time
+            )
+            token_obj.save()
+        
+            return access_token
 
     def create_meeting(self):
         start_time="2023-12-26T00:00"
