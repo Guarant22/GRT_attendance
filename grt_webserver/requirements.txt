@@ -5,3 +5,4 @@ pytz
 djangorestframework==3.14.0
 requests==2.31.0
 celery
+pandas

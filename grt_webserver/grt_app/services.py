@@ -3,6 +3,7 @@ import requests
 import pytz
 import datetime
 import logging
+import pandas as pd
 from django.http import JsonResponse
 from .models import MeetingTime, AccessToken, RefreshToken
 from urllib.parse import urlencode
@@ -193,6 +194,21 @@ class AttendanceServices:
         registrants=list(register_meetings.values_list('email',flat=True))
         # print(registrants)
         return registrants
+    
+    def read_excel_file(self, file):
+        df=pd.read_excel(file)
+        return df
+    
+    def save_excel_mongodb(self, data):
+        for _, row in data.iterrows():
+            document=MeetingTime(
+                email       = row['email'],
+                date        = row['date'],
+                start_time  = row['start_time'],
+                end_time    = row['end_time']
+            )
+            print(document)
+            document.save()
 
 
 
