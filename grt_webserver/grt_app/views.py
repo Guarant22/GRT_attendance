@@ -148,7 +148,23 @@ class ExcelUploadView(View):
             return render(request,'index.html')
         
         return HttpResponse('Excel 파일을 업로드하세요.')
-
+class DeleteStudentView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data=json.loads(request.body)
+            print(data)
+            email=data.get('email')
+            try:
+                student=Student.objects.get(email=email)
+                print(student)
+                student.delete()
+                # meeting_time=MeetingTime.objects.get(id=ObjectId(meeting_id))
+                # return meeting_time
+            except Exception as e:
+                print(e)
+                return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
         
 class DeleteMeetingView(View):
     def post(self, request):
