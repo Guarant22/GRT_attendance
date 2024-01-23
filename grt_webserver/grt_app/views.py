@@ -105,7 +105,6 @@ class AddStudentView(View):
         form = StudentForm(request.POST)
         if form.is_valid():
             student=form.save(commit=False)
-            print(student.id)
             student.save()
             print(student)
             return redirect('addstudent')
@@ -162,7 +161,7 @@ class DeleteStudentView(View):
                 # return meeting_time
             except Exception as e:
                 print(e)
-                return JsonResponse({'success': True})
+            return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
         

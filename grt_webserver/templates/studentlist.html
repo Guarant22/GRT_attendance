@@ -28,7 +28,7 @@
 
 <!-- student_list.html -->
 
-<!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -90,5 +90,6 @@
     <!-- <button class="main_page" type="button">
       <a href="{% url 'mainpage' %}" class="font_color">메인페이지</a>
     </button> -->
+    <script src="{% static 'js/studentlist.js' %}"></script>
   </body>
 </html>
