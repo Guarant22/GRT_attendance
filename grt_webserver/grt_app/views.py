@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView, View
@@ -11,6 +11,7 @@ import json
 import requests
 import os
 import datetime
+
 
 from .models import Student, MeetingTime, AccessToken
 from .forms import StudentForm, StudentSearchForm, MeetingTimeForm, MeetingRoomForm
@@ -63,9 +64,9 @@ class StudentListView(View):
             #     print(student.id)
         else:
             students = Student.objects.all()
-            for student in students:
-                print(ObjectId(student.id))
-                print(type(student.id))
+            # for student in students:
+            #     print(ObjectId(student.id))
+            #     print(type(student.id))
         return render(request, 'studentlist.html', {'form': form, 'students': students})
 
 class MeetingListView(View):
@@ -104,7 +105,6 @@ class AddStudentView(View):
         form = StudentForm(request.POST)
         if form.is_valid():
             student=form.save(commit=False)
-            print(student.id)
             student.save()
             print(student)
             return redirect('addstudent')
@@ -133,7 +133,37 @@ class AddMeetingView(View):
             print(form.errors)
             return render(request, 'studentlist.html', {'success':"No"})
         
-
+class ExcelUploadView(View):
+    template_name='excelmeeting.html'
+    def get(self,request):
+        return render(request,self.template_name)
+    
+    def post(self,request):
+        if 'excel_file' in request.FILES:
+            excel_file=request.FILES['excel_file']
+            service=AttendanceServices()
+            df=service.read_excel_file(excel_file)
+            service.save_excel_mongodb(df)
+            return render(request,'index.html')
+        
+        return HttpResponse('Excel 파일을 업로드하세요.')
+class DeleteStudentView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data=json.loads(request.body)
+            print(data)
+            email=data.get('email')
+            try:
+                student=Student.objects.get(email=email)
+                print(student)
+                student.delete()
+                # meeting_time=MeetingTime.objects.get(id=ObjectId(meeting_id))
+                # return meeting_time
+            except Exception as e:
+                print(e)
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
         
 class DeleteMeetingView(View):
     def post(self, request):
@@ -145,8 +175,6 @@ class DeleteMeetingView(View):
             email = data.get('email')
             start_time = data.get('start_time')
             end_time = data.get('end_time')
-            pk=data.get('pk')
-            obj_id=ObjectId(id)
             try:
                 meeting=MeetingTime.objects.get(date=date, email=email,start_time=start_time,end_time=end_time)
                 print(meeting)

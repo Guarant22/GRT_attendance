@@ -31,6 +31,7 @@ urlpatterns = [
     path('grt/meetings/', views.MeetingListView.as_view(), name='meetinglist'),
     path('grt/addstudent/', views.AddStudentView.as_view(), name = 'addstudent'),
     path('grt/addmeeting/', views.AddMeetingView.as_view(), name='addmeeting'),
+    path('grt/excelmeeting/', views.ExcelUploadView.as_view(), name='excelmeeting'),
     # path('grt/createmeeting/', views.CreateMeetingView.as_view(), name='createmeeting'),
     path('grt/checkattendance/', views.CheckAttendanceView.as_view(), name='checkattendance'),
     path('grt/getparticipant/', views.GetParticipantView.as_view(), name='getparticipant'),
@@ -38,4 +39,5 @@ urlpatterns = [
     path('grt/requestpermission/', views.RequestPermissionView.as_view(), name='requestpermission'),
     path('grt/oauth/', views.OauthView.as_view(), name='oauth'),
     path('grt/deletemeeting/', views.DeleteMeetingView.as_view(), name='deletemeeting'),
+    path('grt/deletestudent/', views.DeleteStudentView.as_view(), name='deletestudent'),
 ]

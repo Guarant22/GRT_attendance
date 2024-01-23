@@ -41,6 +41,7 @@ class SingleUser(AbstractBaseUser, PermissionsMixin):
     #     super(SingleUser, self).save(*args, **kwargs)
 
 class Student(models.Model):
+    _id             = models.ObjectIdField()
     name            = models.CharField(max_length=100)
     email           = models.CharField(max_length=100)
     phone_num       = models.CharField(max_length=15, null=True, blank=True)

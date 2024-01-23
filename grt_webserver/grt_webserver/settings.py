@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os, json
 from django.core.exceptions import ImproperlyConfigured
+from datetime import timedelta
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -167,3 +169,10 @@ CSRF_COOKIE_HTTPONLY = False
 #     for line in f:
 #         key, value = line.strip().split('=')
 #         os.environ[key] = value
+
+CELERY_BEAT_SCHEDULE = {
+    'refresh-access-token-daily': {
+        'task': 'grt_app.tasks.check_token_expire',
+        'schedule': crontab(hour=0, minute=0),  # 매일 자정에 실행
+    },
+}
