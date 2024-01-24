@@ -144,7 +144,7 @@ class ExcelUploadView(View):
             service=AttendanceServices()
             df=service.read_excel_file(excel_file)
             service.save_excel_mongodb(df)
-            return render(request,'index.html')
+            return redirect('mainpage')
         
         return HttpResponse('Excel 파일을 업로드하세요.')
 class DeleteStudentView(View):
