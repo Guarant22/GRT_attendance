@@ -144,7 +144,7 @@ class ExcelUploadView(View):
             service=AttendanceServices()
             df=service.read_excel_file(excel_file)
             service.save_excel_mongodb(df)
-            return render(request,'index.html')
+            return redirect('mainpage')
         
         return HttpResponse('Excel 파일을 업로드하세요.')
 class DeleteStudentView(View):
@@ -244,11 +244,12 @@ class OauthView(View):
         
 class TestView(View):
     def get(self, request, *args, **kwargs):
-        latest_accesst_token=AccessToken.objects.latest('expire_time')
-        today=datetime.date.today()
-        print(latest_accesst_token.expire_time.date())
-        print(today)
-        return
+        token=WebexServices().refresh_access_token()
+        if token:
+            print(token)
+            return render(request,'index.html')
+        else:
+            return JsonResponse({'success': False})
 
 class MainPageView(View):
     def get(self, request, *args, **kwargs):

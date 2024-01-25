@@ -138,6 +138,23 @@ a {
   color: #1e6b7b;
   flex: 1;
 }
+
+.excel_meeting {
+  position: relative;
+  border: none;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 15px;
+  font-family: "paybooc-Light", sans-serif;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.25s;
+  background-color: #205e44;
+  color: #1e6b7b;
+  flex: 1;
+}
+
 /* 
 .now_time {
   position: relative;
@@ -173,6 +190,7 @@ a {
 #login-font {
   font-size: small;
 }
+
 .box {
   width: 90%;
   margin: 10px auto;

@@ -29,7 +29,8 @@ class WebexServices:
     
     def get_refresh_token(self):
         latest_refresh_token=RefreshToken.objects.latest('refresh_expire_time')
-        return latest_refresh_token
+        # print(latest_refresh_token.refresh_token)
+        return latest_refresh_token.refresh_token
 
     def get_permission_url(self):
         params={
@@ -92,9 +93,10 @@ class WebexServices:
         }
         resp=requests.post(f"{self.api_base_url}/access_token",data=params)
         data=resp.json()
-        
+        print(data)
         access_token = data.get("access_token")
         expires_in = data.get("expires_in")
+        print(access_token)
         refresh_token = data.get("refresh_token")
         refresh_expires_in = data.get("refresh_token_expires_in")
         current_time = datetime.datetime.now()
