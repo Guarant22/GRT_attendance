@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os, json
-from django.core.exceptions import ImproperlyConfigured
 from datetime import timedelta
 from celery.schedules import crontab
+
+from .secrets import get_secret
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,16 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-secret_file = os.path.join(BASE_DIR,'secrets.json')
-with open(secret_file) as f:
-    secrets=json.loads(f.read())
-
-def get_secret(setting):
-    try:
-        return secrets[setting]
-    except KeyError:
-        error_msg = "Set the {} environment variable".format(setting)
-        raise ImproperlyConfigured(error_msg)
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -106,7 +97,7 @@ DATABASES = {
         'NAME':'Prototype',
         'CLIENT':{
             # 나중에 환경변수로 꼭 바꾸기
-            'host':'mongodb+srv://limhs8630:C4uKsbjDX27z5cy3@grt.7rbucps.mongodb.net/'
+            'host':get_secret("mongodb_uri")
         }
         
     }
