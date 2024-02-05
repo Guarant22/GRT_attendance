@@ -201,7 +201,17 @@ class AttendanceServices:
         df=pd.read_excel(file)
         return df
     
-    def save_excel_mongodb(self, data):
+    def save_excel_student(self, data):
+        for _, row in data.iterrows():
+            document=MeetingTime(
+                name        = row['name'],
+                email       = row['email'],
+                phone_num   = row['phone_num']
+            )
+            print(document)
+            document.save()
+    
+    def save_excel_meeting(self, data):
         for _, row in data.iterrows():
             document=MeetingTime(
                 email       = row['email'],
