@@ -133,7 +133,23 @@ class AddMeetingView(View):
             print(form.errors)
             return render(request, 'studentlist.html', {'success':"No"})
         
-class ExcelUploadView(View):
+class ExcelStudentsView(View):
+    template_name='excelstudent.html'
+    def get(self,request):
+        return render(request,self.template_name)
+    
+    def post(self,request):
+        if 'excel_file' in request.FILES:
+            excel_file=request.FILES['excel_file']
+            service=AttendanceServices()
+            df=service.read_excel_file(excel_file)
+            service.save_excel_student(df)
+            return redirect('mainpage')
+        
+        return HttpResponse('Excel 파일을 업로드하세요.')
+    
+        
+class ExcelMeetingsView(View):
     template_name='excelmeeting.html'
     def get(self,request):
         return render(request,self.template_name)
@@ -143,10 +159,11 @@ class ExcelUploadView(View):
             excel_file=request.FILES['excel_file']
             service=AttendanceServices()
             df=service.read_excel_file(excel_file)
-            service.save_excel_mongodb(df)
+            service.save_excel_meeting(df)
             return redirect('mainpage')
         
         return HttpResponse('Excel 파일을 업로드하세요.')
+    
 class DeleteStudentView(View):
     def post(self, request, *args, **kwargs):
         try:

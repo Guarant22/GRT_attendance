@@ -6,14 +6,15 @@ import logging
 import pandas as pd
 from django.http import JsonResponse
 from .models import MeetingTime, AccessToken, RefreshToken
+from grt_webserver.secrets import get_secret
 from urllib.parse import urlencode
 from django.db.models import Q
 
 # Cisco Webex
 class WebexServices:
     def __init__(self):
-        self.client_id      ='C03c4cc4241b670127061c64ffaa4d51983adb429256e00f581e155a4bba3b6cf'
-        self.client_secret  ='75a811db4175b51eda367464a91679c1a40c1b7e9f9684186952ce8d4834db0b'
+        self.client_id      =get_secret("client_id")
+        self.client_secret  =get_secret("client_secret")
         self.redirect_base_uri   ='https://limhyeongseok.pythonanywhere.com/'
         self.permission_url      ='https://webexapis.com/v1/authorize?'
         self.access_token   = self.get_access_token()
@@ -201,7 +202,17 @@ class AttendanceServices:
         df=pd.read_excel(file)
         return df
     
-    def save_excel_mongodb(self, data):
+    def save_excel_student(self, data):
+        for _, row in data.iterrows():
+            document=MeetingTime(
+                name        = row['name'],
+                email       = row['email'],
+                phone_num   = row['phone_num']
+            )
+            print(document)
+            document.save()
+    
+    def save_excel_meeting(self, data):
         for _, row in data.iterrows():
             document=MeetingTime(
                 email       = row['email'],
