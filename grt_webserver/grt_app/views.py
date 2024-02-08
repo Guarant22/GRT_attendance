@@ -238,7 +238,6 @@ class CheckAttendanceView(View):
                                                        'absents':absent_students})
         return render(request, 'checkattendance.html',{'form': form})
         
-        
 class GetParticipantView(View):
     def post(self,request,*args, **kwargs):
         response=json.loads(request.body)
@@ -252,6 +251,14 @@ class RequestPermissionView(View):
         # return HttpResponseRedirect(oauth_url)
         
 class OauthView(View):
+    def get(self,request, *args,**kwargs):
+        state=request.GET.get('state')
+        code=request.GET.get('code')
+        if state == 'abcd1234':
+            WebexServices().save_access_token(code)
+        return render(request,'index.html')
+    
+class RefreshTokenView(View):
     def get(self,request, *args,**kwargs):
         state=request.GET.get('state')
         code=request.GET.get('code')
